@@ -5,7 +5,7 @@ WITH cost_mark_capm AS ( -- витрати на кожну рекламную к
     , campaign AS campaign_name
     , media_source
     , SUM(cost_usd) AS sum_cost_usd -- загальні витрати на кожну компанію з урахуванням дати та медіа ресурсу
-  FROM `mornhouse-test-environment.test_app_dataset.cost_table`
+  FROM `analytics_db.user_actions.cost_table`
   GROUP BY 1, 2, 3, 4 -- группуємо за датою, компанією (id та назва) та медіа ресурсом
 
 ), rev_ad AS (
@@ -21,9 +21,9 @@ WITH cost_mark_capm AS ( -- витрати на кожну рекламную к
     , COALESCE(ad_rev.campaign_id, org_ins.campaign_id) AS campaign_id
     , COALESCE(ad_rev.media_source, org_ins.media_source) AS media_source
     , SUM(event_revenue_usd) AS revenue_from_advertising_impressions
-  FROM `mornhouse-test-environment.test_app_dataset.ad_revenue_raw` AS ad_rev
+  FROM `analytics_db.user_actions.ad_revenue_raw` AS ad_rev
   -- робимо LEFT JOIN щоб отримати всіх користувачів, яки прибули не органічно, тому що для органічних замість компаній буде null
-    LEFT JOIN `mornhouse-test-environment.test_app_dataset.non_org_installs_report` AS org_ins
+    LEFT JOIN `analytics_db.user_actions.non_org_installs_report` AS org_ins
       ON ad_rev.analytics_installation_id = org_ins.analytics_installation_id -- analytics_installation_id це унікальниї id для кожного користувача та
   GROUP BY 1, 2, 3, 4 -- группуємо за датою, компанією та медіа ресурсом
 
@@ -35,8 +35,8 @@ WITH cost_mark_capm AS ( -- витрати на кожну рекламную к
     , COALESCE(rev_in.campaign_id, org_ins.campaign_id) AS campaign_id
     , COALESCE(rev_in.media_source, org_ins.media_source) AS media_source
     , SUM(event_revenue_usd) AS revenue_in_app_event
-  FROM `mornhouse-test-environment.test_app_dataset.in_app_events_report` AS rev_in
-    LEFT JOIN `mornhouse-test-environment.test_app_dataset.non_org_installs_report` AS org_ins
+  FROM `analytics_db.user_actions.in_app_events_report` AS rev_in
+    LEFT JOIN `analytics_db.user_actions.non_org_installs_report` AS org_ins
       ON rev_in.analytics_installation_id = org_ins.analytics_installation_id
   WHERE event_revenue_usd > 0
   GROUP BY 1, 2, 3, 4 -- группуємо за датою, компанією та медіа ресурсом
