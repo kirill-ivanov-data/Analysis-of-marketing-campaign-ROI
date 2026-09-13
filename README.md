@@ -13,6 +13,9 @@
 
 **Посилання на дашборд:** https://public.tableau.com/views/test_dashboard_17877627331770/sheet3?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link
 
+**Скріншот дашборду:**
+<img width="1703" height="834" alt="image" src="https://github.com/user-attachments/assets/1155d3c5-e0d3-4f48-9ba4-c7f2bc46cb0b" />
+
 **Готова таблиця:** [marketing-campaign-ROI_csv](test_task_csv.csv)
 
 ### План роботи:
